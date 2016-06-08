@@ -1,2 +1,2 @@
-Solution for CTF tasks in Beginners part 
+Solutions for CTF tasks in Beginners part 
 https://backdoor.sdslabs.co/beginner
