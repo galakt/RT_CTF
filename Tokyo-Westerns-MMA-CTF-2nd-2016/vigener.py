@@ -28,41 +28,11 @@ def kasiski_test(s, l):
     dist = functools.reduce(fractions.gcd, dists)
     return dist
 
-def bruteforce(charset, maxlength):
+
+def bruteforce(charset, minlength, maxlength):
     return (''.join(candidate)
         for candidate in itertools.chain.from_iterable(itertools.product(charset, repeat=i)
-        for i in range(6, maxlength + 1)))
-
-
-def try_guess_vi_key():
-    for attempt in bruteforce(chars, 6):
-        attempt = key + attempt
-        try:
-            decrypted_by_attempt = decrypt(crypted_base64, attempt)
-            print('OUU SHIT!')
-            print(attempt)
-            print(decrypted_by_attempt)
-        except:
-            a=1
-
-
-def look_for_key():
-    for attempt in bruteforce(chars, 1):
-        attempt = key + attempt
-        crypted_by_attempt = encrypt(message, attempt)
-        print(crypted_by_attempt)
-        if crypted_by_attempt.startswith('a7TFeCSh'):
-            print('OK!')
-            print(attempt)
-            print(crypted_by_attempt)
-            break
-        #if len(attempt) <= 5:
-        #    continue
-        # print(len(attempt))
-        # if crypt(attempt) == etalon:
-        #     print('found!')
-        #     print(attempt)
-        #     break
+        for i in range(minlength, maxlength + 1)))
 
 
 def shift(char, key, rev = False):
@@ -104,6 +74,8 @@ def is_valid_key_block(key, k, restrict=3):
             return False
     return True
 
+# for k in range(dist // 4):
+#     for i in bruteforce(chars, 4, 4):
 
 for k in range(dist // 4):
     for x in chars:
@@ -117,48 +89,9 @@ for k in range(dist // 4):
                     if is_valid_key_block(x + y + z + w, k):
                         key = x + y + z + w
                         plaintext = decrypt(crypted_base64, key)
-                        print(k, key, b'  '.join(chunk(plaintext, 3)[ k :: dist // 4]))
+                        print('%s %s %s' % (k, key, b'  '.join(chunk(plaintext, 3)[ k :: dist // 4])))
 
 key = 'shA6I8HUXLFY'
 print(key)
 print(decrypt(crypted_base64, key))
 
-#try_guess_vi_key()
-#print(encrypt(message, key))
-#print(decrypt('a7TFeCSh', key))
-
-#print(len(crypted_base64)) #368
-#look_for_key()
-#print('\n')
-#print(decrypt('a7TFeCSh', key))
-#key 5-14
-
-##print(random.randint(5,14))
-
-
-# if len(sys.argv) == 4 and sys.argv[1] == 'encrypt':
-#     f = open(sys.argv[3])
-#     plain = f.read()
-#     f.close()
-#
-#     key = generate_random_key(random.randint(5,14))
-#
-#     print(encrypt(plain, key))
-#
-#     f = open(sys.argv[2], 'w')
-#     f.write(key)
-#     f.close()
-#
-# elif len(sys.argv) == 4 and sys.argv[1] == 'decrypt':
-#     f = open(sys.argv[3])
-#     encrypted = f.read()
-#     f.close()
-#
-#     f = open(sys.argv[2])
-#     key = f.read()
-#     f.close()
-#
-#     print(decrypt(encrypted, key), end = '')
-#
-# else:
-#     print("Usage: python %s encrypt|decrypt (key-file) (input-file)" % sys.argv[0])
